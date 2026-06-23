@@ -28,8 +28,10 @@ jobs:
           gradle-version: '7.6'
 
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon -Dandroid.suppressUnsupportedOptionWarnings=true
         working-directory: crowd-express-android
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.warning.mode=none"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
