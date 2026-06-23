@@ -16,58 +16,19 @@ jobs:
       - name: Unzip project
         run: unzip crowd-express-android.zip
 
-      - name: Show Solver.kt
-        run: cat crowd-express-android/app/src/main/java/com/crowdexpress/solver/solver/Solver.kt
-      - name: Fix gradle files
-        run: |
-          cat > crowd-express-android/build.gradle << 'EOF'
-          buildscript {
-              ext.kotlin_version = '1.8.0'
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:7.4.2'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-              }
-          }
-          task clean(type: Delete) {
-              delete rootProject.buildDir
-          }
-          EOF
-          cat > crowd-express-android/settings.gradle << 'EOF'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = "CrowdExpressSolver"
-          include ':app'
-          EOF
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.6
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '7.6'
+          gradle-version: '8.6'
 
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace
         working-directory: crowd-express-android
 
       - name: Upload APK
