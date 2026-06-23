@@ -61,6 +61,4 @@ jobs:
         with:
           name: crowd-express-solver-debug
           path: crowd-express-android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30          name: crowd-express-solver-debug
-          path: crowd-express-android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
