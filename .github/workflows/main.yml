@@ -16,6 +16,8 @@ jobs:
       - name: Unzip project
         run: unzip crowd-express-android.zip
 
+      - name: Show Solver.kt
+        run: cat crowd-express-android/app/src/main/java/com/crowdexpress/solver/solver/Solver.kt
       - name: Fix gradle files
         run: |
           cat > crowd-express-android/build.gradle << 'EOF'
