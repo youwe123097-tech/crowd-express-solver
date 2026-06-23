@@ -16,7 +16,7 @@ jobs:
       - name: Unzip project
         run: unzip crowd-express-android.zip
 
-      - name: Fix build.gradle
+      - name: Fix gradle files
         run: |
           cat > crowd-express-android/build.gradle << 'EOF'
           buildscript {
@@ -30,15 +30,27 @@ jobs:
                   classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
               }
           }
-          allprojects {
+          task clean(type: Delete) {
+              delete rootProject.buildDir
+          }
+          EOF
+          cat > crowd-express-android/settings.gradle << 'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
               repositories {
                   google()
                   mavenCentral()
               }
           }
-          task clean(type: Delete) {
-              delete rootProject.buildDir
-          }
+          rootProject.name = "CrowdExpressSolver"
+          include ':app'
           EOF
 
       - name: Set up JDK 17
