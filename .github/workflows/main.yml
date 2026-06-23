@@ -16,6 +16,31 @@ jobs:
       - name: Unzip project
         run: unzip crowd-express-android.zip
 
+      - name: Fix build.gradle
+        run: |
+          cat > crowd-express-android/build.gradle << 'EOF'
+          buildscript {
+              ext.kotlin_version = '1.8.0'
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:7.4.2'
+                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+              }
+          }
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          task clean(type: Delete) {
+              delete rootProject.buildDir
+          }
+          EOF
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -35,5 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: crowd-express-solver-debug
+          path: crowd-express-android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30          name: crowd-express-solver-debug
           path: crowd-express-android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
